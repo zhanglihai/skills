@@ -1,15 +1,17 @@
 # Claude Code Notify
 
-Claude Code hooks 配置，在需要人工确认时和完成工作时播放声音通知。
+Claude Code hooks 配置，在需要人工确认时和完成工作时播放语音通知。
 
 ## 功能
 
-通过配置 Claude Code hooks，在两个关键时刻播放声音：
+通过配置 Claude Code hooks，在两个关键时刻播放语音提示：
 
-| Hook 事件 | 触发时机 | 声音 |
-|-----------|----------|------|
-| `Notification` | Claude 等待权限确认或提问时 | Hero（响亮，引起注意） |
-| `Stop` | Claude 完成当前工作时 | Sosumi（清脆，标识完成） |
+| Hook 事件 | 触发时机 | 语音内容 |
+|-----------|----------|----------|
+| `Notification` | Claude 等待权限确认或提问时 | "需要确认" |
+| `Stop` | Claude 完成当前工作时 | "已完成" |
+
+语音文件由 macOS `say` 命令（TTS）生成，使用婷婷（Tingting）中文语音。
 
 ## 文件说明
 
@@ -19,8 +21,8 @@ claude-code-notify/
 ├── play-sound.sh       # macOS / Linux 播放脚本
 ├── play-sound.ps1      # Windows 播放脚本
 └── sounds/
-    ├── Hero.aiff       # 确认提示音
-    └── Sosumi.aiff     # 完成提示音
+    ├── notify.wav      # "需要确认"（35KB）
+    └── done.wav        # "已完成"（29KB）
 ```
 
 ## 安装配置
@@ -125,9 +127,53 @@ cp -r claude-code-notify ~/.claude/claude-code-notify
 
 Linux 需确保已安装至少一个音频播放器（大多数桌面发行版已预装 PulseAudio 或 PipeWire）。
 
-## 自定义
+## 自定义语音
 
-替换 `sounds/` 目录中的音频文件即可自定义声音。macOS 系统自带声音位于 `/System/Library/Sounds/`，可选：Hero、Sosumi、Funk、Bottle、Ping、Glass、Pop 等。
+### 使用 macOS `say` 命令生成语音文件
+
+本项目自带的语音文件由 macOS `say` 命令（TTS 文字转语音）生成。你可以用同样的方式生成自己的语音文件。
+
+#### 基本命令
+
+```bash
+# 生成语音文件
+say -v Tingting -r 250 \
+    --file-format=WAVE --data-format=LEI16@22050 \
+    -o sounds/notify.wav "需要确认"
+
+say -v Tingting -r 250 \
+    --file-format=WAVE --data-format=LEI16@22050 \
+    -o sounds/done.wav "已完成"
+```
+
+#### 查看可用语音
+
+```bash
+# 列出所有已安装语音
+say -v '?'
+
+# 只看中文语音
+say -v '?' | grep -i zh
+```
+
+#### 调参示例
+
+```bash
+# 慢速（适合做提示音，听得更清楚）
+say -v Tingting -r 150 --file-format=WAVE --data-format=LEI16@22050 \
+    -o sounds/notify.wav "请注意"
+
+# 快速
+say -v Tingting -r 350 --file-format=WAVE --data-format=LEI16@22050 \
+    -o sounds/done.wav "搞定了"
+
+```
+
+> **提示：** 如果系统没有安装某个语音，可以在"系统设置 → 辅助功能 → 语音内容 → 管理语音"中下载。
+
+### 使用其他音频文件
+
+直接将音频文件放到 `sounds/` 目录，保持文件名 `notify.wav` 和 `done.wav` 不变即可。支持的格式取决于平台音频引擎（macOS 支持 `.aiff`、`.wav`、`.mp3`、`.m4a` 等）。
 
 ## 禁用
 

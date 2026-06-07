@@ -8,9 +8,9 @@ param(
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 
 switch ($SoundType) {
-    "prompt" { $SoundFile = Join-Path $ScriptDir "sounds\Hero.aiff" }
-    "done"   { $SoundFile = Join-Path $ScriptDir "sounds\Sosumi.aiff" }
-    default  { $SoundFile = Join-Path $ScriptDir "sounds\Hero.aiff" }
+    "prompt" { $SoundFile = Join-Path $ScriptDir "sounds\notify.wav" }
+    "done"   { $SoundFile = Join-Path $ScriptDir "sounds\done.wav" }
+    default  { $SoundFile = Join-Path $ScriptDir "sounds\notify.wav" }
 }
 
 if (Test-Path $SoundFile) {

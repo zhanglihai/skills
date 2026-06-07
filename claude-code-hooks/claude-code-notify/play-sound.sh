@@ -7,9 +7,9 @@ SOUND_TYPE="${1:-prompt}"
 
 # Determine sound file
 case "$SOUND_TYPE" in
-  prompt) SOUND_FILE="$SCRIPT_DIR/sounds/Hero.aiff" ;;
-  done)   SOUND_FILE="$SCRIPT_DIR/sounds/Sosumi.aiff" ;;
-  *)      SOUND_FILE="$SCRIPT_DIR/sounds/Hero.aiff" ;;
+  prompt) SOUND_FILE="$SCRIPT_DIR/sounds/notify.wav" ;;
+  done)   SOUND_FILE="$SCRIPT_DIR/sounds/done.wav" ;;
+  *)      SOUND_FILE="$SCRIPT_DIR/sounds/notify.wav" ;;
 esac
 
 # --- Platform-specific playback ---
